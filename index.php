@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
     <head>
         <meta charset="UTF-8">
         <title>Connect</title>
@@ -22,13 +22,19 @@
             <form method='post' id='formInscription' >
                 <fieldset>
                     <legend>Inscrivez-vous</legend>
-                    <p>
-                        <input type='text'     placeholder='Pseudo'         name='pseudo'  > <br><br>
-                        <input type='text'     placeholder='Email'          name='email'   > <br><br>
-                        <input type='password' placeholder='Password'       name='password'> <br><br>
-                        <input type='password' placeholder='Verif Password' name='password'> <br><br>
+                        <input type='text'     placeholder='Pseudo'         name='pseudo'       > <br><br>
+                        <div   id="Pseudo_erreur"        hidden="true">     <p style="color: red;">Votre pseudo doit contenir plus de 3 caractères</p></div>
+
+                        <input type='text'     placeholder='Email'          name='email'        > <br><br>
+                        <div   id="Email_erreur"         hidden="true">     <p style="color: red;">Adresse email invalide                         </p></div>
+
+                        <input type='password' placeholder='Password'       name='password'     > <br><br>
+                        <div   id="Password_erreur"      hidden="true">     <p style="color: red;">Mots de passe incorrect                        </p></div>
+
+                        <input type='password' placeholder='Verif Password' name='verifPassword'> <br><br>
+                        <div   id="VerifPassword_erreur" hidden="true">     <p style="color: red;">Validation incorrect                           </p></div>
+
                         <input type='submit' value='Connection'>
-                    </p>
                 </fieldset>
             </form>
         </div>
