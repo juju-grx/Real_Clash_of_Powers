@@ -4,16 +4,50 @@ var Pseudo_erreur        = document.getElementById("Pseudo_erreur");
 var Email_erreur         = document.getElementById("Email_erreur");
 var Password_erreur      = document.getElementById("Password_erreur");
 var VerifPassword_erreur = document.getElementById("VerifPassword_erreur");
+var valuePseudo          = document.getElementById("valuePseudo");
+var valueEmail           = document.getElementById("valueEmail");
+var valuePassword        = document.getElementById("valuePassword");
+var valuePasswordVerif   = document.getElementById("valuePasswordVerif");
+var champsVide           = document.getElementById("champsVide");
+var buttonInscription    = document.getElementById("buttonInscription");
+var buttonConnection     = document.getElementById("buttonConnection");
+var buttonValidationInscription = document.getElementById("buttonValidationInscription");
 }
-formInscription.hidden = true;
 
-document.getElementById("buttonInscription").onclick = function(e) {
+function isEmpty(str) {
+    return (!str || 0 === str.length);
+}
+
+buttonInscription.onclick = function(e) {
+
+    buttonConnection.disabled = false;
+    buttonInscription.disabled = true;
+
+    var ifInscription = setInterval(function() { 
+        if(buttonConnection.disabled == true)
+        {
+            clearInterval(ifInscription)
+        }
+
+        if(this.isEmpty(valuePseudo.value) || this.isEmpty(valueEmail.value) || this.isEmpty(valuePassword.value) || this.isEmpty(valuePasswordVerif.value)){
+            buttonValidationInscription.disabled = true;
+            champsVide.hidden = false;
+    
+        } else {
+            buttonValidationInscription.disabled = false;
+            champsVide.hidden = true;
+        }
+    
+    },1000)
 
     formInscription.hidden = false;
     formConnection.hidden  = true ;
 }
 
-document.getElementById("buttonConnection").onclick = function(e) {
+buttonConnection.onclick = function(e) {
+
+    buttonConnection.disabled = true;
+    buttonInscription.disabled = false;
 
     formInscription.hidden = true ;
     formConnection.hidden  = false;
@@ -48,12 +82,7 @@ formConnection.addEventListener('submit', function(e) {
 
 formInscription.addEventListener('submit', function(e) {
     e.preventDefault();
-    
-    Pseudo_erreur.hidden        = true;
-    Email_erreur.hidden         = true;
-    Password_erreur.hidden      = true;
-    VerifPassword_erreur.hidden = true;
-    
+
     var data = new FormData(this);
     var xhr = new XMLHttpRequest();
 
@@ -64,11 +93,15 @@ formInscription.addEventListener('submit', function(e) {
             if(res.success) {
                 console.log('Utilisateur inscript !');
             } else {
-                if(res.msg.erreur = 1)
+                if(res.erreur == 1)
                 {
-                    alert("Veuillez renseiger tous les chemps");
+                    alert("Veuillez renseiger tous les champs");
                 } else {
-                    Pseudo_erreur.hidden        = res.msg.pseudo;
+                    if(!res.msg.pseudo)
+                    {
+                        Pseudo_erreur.hidden  = false;
+                        Pseudo_erreur.textContent = res.msg.erreurPseudo;
+                    }
                     Email_erreur.hidden         = res.msg.email;
                     Password_erreur.hidden      = res.msg.password;
                     VerifPassword_erreur.hidden = res.msg.verifpassword;
@@ -78,6 +111,35 @@ formInscription.addEventListener('submit', function(e) {
             alert('Une erreur est survenue...');
         }
     };
+
+    /*var valuePseudo = document.getElementById("valuePseudo");
+    console.log(valuePseudo);
+    setInterval(function() { 
+
+        if(valuePseudo.textLength <= 3)
+        {
+            Pseudo_erreur.hidden  = false;
+            Pseudo_erreur.textContent = "Votre pseudo doit contenir plus de 3 caractères";
+        } else {
+            Pseudo_erreur.hidden  = true;
+        }   
+
+        /*if(filter_var(valueEmail.value, 274))
+        {
+            Email_erreur.hidden = true;
+            Email_erreur.textContent = "Adresse email invalide";
+        } else {
+            Email_erreur.hidden = true;
+        }
+        
+
+    
+    
+    
+    
+    
+    
+    }, 500);*/
 
     xhr.open('POST', 'formulaire/traitementInscription.php', true);
     xhr.responseType = 'json';
